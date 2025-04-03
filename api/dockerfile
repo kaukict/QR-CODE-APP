@@ -1,0 +1,18 @@
+FROM python:3.12
+WORKDIR /app
+
+#best practise to split the copy
+#docker is caching built, so when rebuild needed it doesnt need to run it from begining
+#it will reuse the cache if your app code changes, but the dependencies didn’t.
+COPY requirements.txt .
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+EXPOSE 8000
+
+# --host 0.0.0.0 listen to all network adapters, if you specify IP it will listen only to that api. 
+# --port - not needed but usefull for docker compose
+CMD ["uvicorn", "main:app","--host", "0.0.0.0", "--port", "8000"]
+
