@@ -5,7 +5,7 @@ on:
     branches: [main]
 
 env:
-  ACR_NAME: ToKACapstoneContainerReg                # e.g. devopsqrcodeacr
+  ACR_NAME: tokacapstonecontainerreg                # e.g. devopsqrcodeacr
   RESOURCE_GROUP: CapstoneProject           # optional for reference
 
 jobs:
