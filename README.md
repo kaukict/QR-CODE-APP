@@ -1,50 +1,44 @@
-# devops-qr-code
+🚀 Project Plan and Progress
 
-This is the sample application for the DevOps Capstone Project.
-It generates QR Codes for the provided URL, the front-end is in NextJS and the API is written in Python using FastAPI.
+📌 Goal:
 
-## Application
+Build and deploy a containerized QR code web application using DevOps best practices:
 
-**Front-End** - A web application where users can submit URLs.
+FastAPI backend + Next.js frontend
 
-**API**: API that receives URLs and generates QR codes. The API stores the QR codes in cloud storage(AWS S3 Bucket).
+Azure services (Key Vault, Blob Storage, ACR, AKS)
 
-## Running locally
+Automated CI/CD via GitHub Actions
 
-### API
+Infrastructure as Code using Bicep (and Terraform later)
 
-The API code exists in the `api` directory. You can run the API server locally:
+✅ What We've Done:
 
-- Clone this repo
-- Make sure you are in the `api` directory
-- Create a virtualenv by typing in the following command: `python -m venv .venv`
-- Install the required packages: `pip install -r requirements.txt`
-- Create a `.env` file, and add you AWS Access and Secret key, check  `.env.example`
-- Also, change the BUCKET_NAME to your S3 bucket name in `main.py`
-- Run the API server: `uvicorn main:app --reload`
-- Your API Server should be running on port `http://localhost:8000`
+Set up FastAPI backend and Next.js frontend
 
-### Front-end
+Integrated Azure Key Vault for secrets
 
-The front-end code exits in the `front-end-nextjs` directory. You can run the front-end server locally:
+Improved QR image flow (base64 and upload)
 
-- Clone this repo
-- Make sure you are in the `front-end-nextjs` directory
-- Install the dependencies: `npm install`
-- Run the NextJS Server: `npm run dev`
-- Your Front-end Server should be running on `http://localhost:3000`
+Containerized both frontend and backend
 
+Set up Docker Compose for local dev
 
-## Goal
+Created Bicep template for Azure Container Registry
 
-The goal is to get hands-on with DevOps practices like Containerization, CICD and monitoring.
+Cleaned up GitHub repo structure (promoted devops-qr-code content to root)
 
-Look at the capstone project for more detials...
+🔜 What's Next:
 
-## Author
+Configure GitHub Actions to:
 
-[Rishab Kumar](https://github.com/rishabkumar7)
+Build frontend/backend Docker images
 
-## License
+Push to Azure Container Registry (ACR)
 
-[MIT](./LICENSE)
+Use Terraform to provision an AKS (Azure Kubernetes Service) cluster
+
+Deploy the app to AKS using kubectl
+
+Add CI deployment step (optional Helm later)
+

@@ -1,0 +1,40 @@
+name: Build and Push Docker Images to ACR
+
+on:
+  push:
+    branches: [main]
+
+env:
+  ACR_NAME: ToKACapstoneContainerReg                # e.g. devopsqrcodeacr
+  RESOURCE_GROUP: CapstoneProject           # optional for reference
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    #pulls repository code to GitHub VM
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    #login to azure using secret stored in GitHub
+    - name: Log in to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Log in to ACR
+      run: az acr login --name $ACR_NAME
+
+    #build docker images(docker is preinstalled in Git VM)
+    #-t assing a tag to the image
+    # ./api tells docker what docker file to use, in this case dockerfile for backend is in ./api folder
+    - name: Build and push backend image
+      run: |
+        docker build -t $ACR_NAME.azurecr.io/qr-backend:latest ./api
+        docker push $ACR_NAME.azurecr.io/qr-backend:latest
+
+    - name: Build and push frontend image
+      run: |
+        docker build -t $ACR_NAME.azurecr.io/qr-frontend:latest ./front-end-nextjs
+        docker push $ACR_NAME.azurecr.io/qr-frontend:latest
