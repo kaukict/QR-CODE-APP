@@ -28,13 +28,13 @@ Created Bicep template for Azure Container Registry
 
 Cleaned up GitHub repo structure (promoted devops-qr-code content to root)
 
-🔜 What's Next:
-
-Configure GitHub Actions to:
+Configured GitHub Actions to:
 
 Build frontend/backend Docker images
 
 Push to Azure Container Registry (ACR)
+
+🔜 What's Next:
 
 Use Terraform to provision an AKS (Azure Kubernetes Service) cluster
 
