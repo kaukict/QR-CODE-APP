@@ -36,5 +36,6 @@ jobs:
 
     - name: Build and push frontend image
       run: |
-        docker build -t $ACR_NAME.azurecr.io/qr-frontend:latest ./front-end-nextjs
+        docker build --build-arg NEXT_PUBLIC_API_URL=http://backend:8000 \
+        -t $ACR_NAME.azurecr.io/qr-frontend:latest ./front-end-nextjs
         docker push $ACR_NAME.azurecr.io/qr-frontend:latest
