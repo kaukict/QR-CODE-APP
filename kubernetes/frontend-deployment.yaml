@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  labels:
+    app: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: tokacapstonecontainerreg.azurecr.io/qr-frontend:latest
+        ports:
+        - containerPort: 3000
+        env:
+        #variable used in the frontend app
+        - name: NEXT_PUBLIC_API_URL
+          value: http://backend:8000

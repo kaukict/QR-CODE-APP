@@ -1,0 +1,32 @@
+#api version
+#specify the name  of the service which will be managing the cluster Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  labels:
+    app: backend
+#number or replicas to run
+#matchlabels - connecty deployment to pods
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+#label pod as backend
+  template:
+    metadata:
+      labels:
+        app: backend
+#specify the image to use and expose port inside the pod
+    spec:
+      containers:
+      - name: backend
+        image: tokacapstonecontainerreg.azurecr.io/qr-backend:latest
+        ports:
+        - containerPort: 8000
+
+      #Set env variable for key vault access
+        env:
+        - name: AZURE_KEY_VAULT_NAME
+          value: ToKaKeyVault

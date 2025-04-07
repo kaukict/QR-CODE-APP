@@ -59,6 +59,30 @@
 - Login server output example: `myacr.azurecr.io`
 - This ACR will be used for pushing built Docker images during CI/CD
 
+### ✅ 7. GitHub Actions CI/CD Setup
+
+Created GitHub Actions workflow .github/workflows/docker-build-and-push.yml
+
+Workflow runs on every push to the main branch
+
+Steps included:
+
+✅ Checkout source code
+✅ Log in to Azure using service principal stored in GitHub Secrets
+✅ Authenticate to ACR using az acr login
+✅ Build and tag backend and frontend Docker images
+✅ Push images to Azure Container Registry
+
+Configured GitHub Secret AZURE_CREDENTIALS using output from:
+
+az ad sp create-for-rbac \
+  --name "gh-actions-sp" \
+  --role contributor \
+  --scopes /subscriptions/<sub-id>/resourceGroups/<rg-name> \
+  --sdk-auth
+
+Verified successful GitHub Actions execution and image upload to ACR ✅
+
 ---
 
 ## 📘 Appendices
