@@ -11,9 +11,7 @@ export default function Home() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/generate-qr/`,
-        { url },
-        { headers: { "Content-Type": "application/json" } }
+        `/api/generate-qr?url=${encodeURIComponent(url)}`
       );
   
       // Set the base64 image returned from backend
