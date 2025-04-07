@@ -11,7 +11,9 @@ export async function POST(request) {
 
   try {
     const response = await axios.post(
-      `http://backend:8000/generate-qr/?url=${encodeURIComponent(url)}`
+      "http://backend:8000/generate-qr/",
+      { url }, // send in body, not query string
+      { headers: { "Content-Type": "application/json" } }
     );
 
     // Return everything your frontend expects

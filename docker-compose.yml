@@ -11,8 +11,6 @@ services:
       - AZURE_KEY_VAULT_NAME=ToKaKeyVault
     volumes:
       - ./api:/api
-    depends_on:
-      - frontend
 
   frontend:
     build:
@@ -20,5 +18,7 @@ services:
       dockerfile: dockerfile
     ports:
       - "3000:3000"
-    environment:
-      - NEXT_PUBLIC_API_URL=http://backend:8000
+    depends_on:
+    - backend
+    volumes:
+      - ./front-end-nextjs:/front-end-nextjs
