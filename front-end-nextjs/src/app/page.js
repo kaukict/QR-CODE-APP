@@ -16,6 +16,7 @@ export default function Home() {
   
       // Set the base64 image returned from backend
       setQrCodeUrl(response.data.qr_image);
+      console.log("Setting QR image from:", response.data.qr_image);
   
       // Optional: store the blob ID for future use
       console.log("QR code ID (used in blob):", response.data.id);
