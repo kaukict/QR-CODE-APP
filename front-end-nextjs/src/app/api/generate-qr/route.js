@@ -17,13 +17,13 @@ export async function POST(request) {
     );
 
     console.log("🔍 Checking backend values from FastAPI response:");
-    console.log("qr_image_base64:", response.data.qr_image_base64);
+    console.log("qr_image_base64:", response.data.qr_image);
     console.log("qr_code_url:", response.data.qr_code_url);
     console.log("Full backend response:", response.data);
-    
+
     // Return everything your frontend expects
     return NextResponse.json({
-      qr_image: response.data.qr_image_base64,
+      qr_image: response.data.qr_image,
       qr_code_url: response.data.qr_code_url,
       id: response.data.id || null // Optional: include ID if your backend returns one
     });
