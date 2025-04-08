@@ -12,7 +12,7 @@ Automated CI/CD via GitHub Actions
 
 Infrastructure as Code using Bicep (and Terraform later)
 
-✅ What We've Done:
+✅ What was Done:
 
 Set up FastAPI backend and Next.js frontend
 
@@ -34,11 +34,13 @@ Build frontend/backend Docker images
 
 Push to Azure Container Registry (ACR)
 
-🔜 What's Next:
+Provisioned AKS cluster using Terraform
 
-Use Terraform to provision an AKS (Azure Kubernetes Service) cluster
+Deployed frontend and backend services to AKS with Kubernetes YAML files
 
-Deploy the app to AKS using kubectl
+Connected AKS workloads to Azure Key Vault using Managed Identity
 
-Add CI deployment step (optional Helm later)
+Configured internal routing using Next.js API routes and Kubernetes service discovery
+
+Confirmed full app working on public LoadBalancer: QR code generation, instant preview, and blob upload
 

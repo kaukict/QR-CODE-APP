@@ -82,6 +82,130 @@ az ad sp create-for-rbac \
   --sdk-auth
 
 Verified successful GitHub Actions execution and image upload to ACR ✅
+ 
+ ### ✅ 8. Terraform AKS Setup
+
+Added .terraform/ and *.tfstate to .gitignore to avoid committing large provider binaries or sensitive state files
+
+Created a new terraform/ directory to manage infrastructure
+
+Initialized Terraform with Azure provider in main.tf
+
+Used the Azure CLI login context to authenticate Terraform for local development
+
+Instead of creating a new resource group, we referenced an existing one using a data block:
+
+data "azurerm_resource_group" "capstoneproject" {
+  name = var.resource_group_name
+}
+
+This allows Terraform to read the resource group and its properties (like location) without managing or modifying it
+
+Location is now pulled dynamically using:
+
+location = data.azurerm_resource_group.capstoneproject.location
+
+Removed the need for a separate location variable in variables.tf
+
+Defined the AKS cluster with:
+
+resource "azurerm_kubernetes_cluster" "aks" {
+  name                = var.cluster_name
+  location            = data.azurerm_resource_group.capstoneproject.location
+  resource_group_name = data.azurerm_resource_group.capstoneproject.name
+  dns_prefix          = "${var.cluster_name}-dns"
+
+  default_node_pool {
+    name       = "default"
+    node_count = 1
+    vm_size    = "Standard_DS2_v2"
+  }
+
+  identity {
+    type = "SystemAssigned"
+  }
+
+  tags = {
+    environment = "dev"
+    project     = "capstone"
+  }
+}
+
+Integrated AKS with ACR to allow secure image pulls:
+
+Used a data block to reference existing ACR
+
+Assigned AcrPull role to the AKS cluster's kubelet identity:
+
+data "azurerm_container_registry" "acr" {
+  name                = var.acr_name
+  resource_group_name = data.azurerm_resource_group.capstoneproject.name
+}
+
+resource "azurerm_role_assignment" "aks_acr_pull" {
+  principal_id         = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
+  role_definition_name = "AcrPull"
+  scope                = data.azurerm_container_registry.acr.id
+}
+
+Configured environment variable AZURE_KEY_VAULT_NAME in the backend deployment manifest
+
+Assigned get and list Key Vault permissions to the correct identity actually used by AKS pods (validated via runtime error message)
+
+✅ Confirmed backend is running and able to retrieve secrets from Key Vault using the correct pod-assigned managed identity (determined from Key Vault access error and fixed via updated access policy)
+
+ ### ✅ 9. Frontend Environment Variable Injection (NEXT_PUBLIC_API_URL)$1
+
+Update: Using Internal Rewrites in Next.js
+
+To avoid exposing internal cluster names like backend:8000 to the browser (which causes DNS errors), we implemented a Next.js rewrites() rule:
+
+In next.config.js, added:
+
+const nextConfig = {
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: 'http://backend:8000/:path*'
+      }
+    ]
+  }
+}
+
+module.exports = nextConfig;
+
+Updated frontend API call to:
+
+const response = await axios.post("/api/generate-qr", { url });
+
+This allows the browser to safely call the frontend service at:
+
+http://<frontend-lb-ip>/api/generate-qr
+
+...which is internally rewritten to http://backend:8000/generate-qr inside the cluster.
+
+✅ Eliminated ERR_NAME_NOT_RESOLVED DNS error in browser
+
+✅ Clean separation of public and internal routing
+
+ ### ✅ 10. Kubernetes Deployment + Service Setup
+
+Created Kubernetes manifests for backend and frontend:
+
+backend-deployment.yaml and backend-service.yaml
+
+frontend-deployment.yaml and frontend-service.yaml
+
+Used LoadBalancer service type for frontend to expose public IP
+
+Verified service DNS resolution (http://backend:8000) works inside the cluster
+
+Frontend routes API calls through internal /api/generate-qr endpoint (Next.js API route)
+
+Backend returns base64 QR image and blob URL
+
+✅ App confirmed working via LoadBalancer IP from kubectl get svc
 
 ---
 
