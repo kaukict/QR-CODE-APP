@@ -3,6 +3,10 @@ name: Build and Push Docker Images to ACR
 on:
   push:
     branches: [main]
+        paths-ignore:
+         - 'README.md'
+         - 'DetailedProcess.md'
+         - 'docker-compose.yml'
 
 env:
   ACR_NAME: tokacapstonecontainerreg                # e.g. devopsqrcodeacr
