@@ -15,7 +15,9 @@ export async function POST(request) {
       { url }, // send in body, not query string
       { headers: { "Content-Type": "application/json" } }
     );
+
     console.log("Backend QR response:", response.data);
+    
     // Return everything your frontend expects
     return NextResponse.json({
       qr_image: response.data.qr_image_base64,

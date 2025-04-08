@@ -13,11 +13,13 @@ export default function Home() {
       const response = await axios.post(
         `/api/generate-qr?url=${encodeURIComponent(url)}`
       );
+      console.log("⬅️ Raw response object:", response); // <-- here!
+      console.log("⬅️ response.data:", response.data); // also helpful
+      console.log("⬅️ response.data.qr_image:", response.data.qr_image); // should NOT be undefined
   
       // Set the base64 image returned from backend
       setQrCodeUrl(response.data.qr_image);
-      console.log("Setting QR image from:", response.data.qr_image);
-  
+      
       // Optional: store the blob ID for future use
       console.log("QR code ID (used in blob):", response.data.id);
   
